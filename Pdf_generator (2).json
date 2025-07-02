@@ -1,0 +1,371 @@
+{
+  "name": "Pdf generator",
+  "nodes": [
+    {
+      "parameters": {
+        "fileName": "{{ $json.title }}_{{ $json.timestamp.split('T')[0] }}.pdf",
+        "options": {}
+      },
+      "id": "b4fe94b9-c327-42c1-9b56-47fb6c0dcf1c",
+      "name": "Save PDF",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "typeVersion": 1,
+      "position": [
+        980,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=```\nYou are a professional PDF content generator. Based on the input data, generate clean, well-formatted HTML content suitable for PDF conversion.\n\nGenerate content according to these specifications:\n- Title: {{ $json.title }}\n- Category: {{ $json.pdfCategory }}  \n- Word Count: {{ $json.wordCount }}\n- Style: {{ $json.designStyle }}\n- Language: {{ $json.language }}\n- Audience: {{ $json.audienceType }}\n\nReturn only valid HTML with inline CSS styling optimized for PDF generation.\n```",
+        "options": {
+          "systemMessage": "You are a helpful assistant"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        380,
+        280
+      ],
+      "id": "50010644-bb83-4115-b92f-23e2501e572a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        600
+      ],
+      "id": "fd4a577d-4b9b-4976-bef4-897ae1e6a9e4",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "URL/HTML to PDF",
+        "url": "={{ $json.output }}",
+        "advancedOptions": {
+          "orientation": "portrait",
+          "paperSize": "custom",
+          "margins": "10,10,10,10"
+        }
+      },
+      "type": "n8n-nodes-pdfco.PDFco Api",
+      "typeVersion": 1,
+      "position": [
+        840,
+        240
+      ],
+      "id": "8f18bb38-2b7c-43e3-8c9b-a477c1911e39",
+      "name": "PDFco Api",
+      "credentials": {
+        "pdfcoApi": {
+          "id": "WhNHxfOVcDKuIjtU",
+          "name": "PDF.co account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": \"PDF generated and saved successfully\",\n  \"filename\": \"{{ $('Save PDF').item.json.fileName }}\",\n  \"timestamp\": \"{{ new Date().toISOString() }}\",\n  \"wordCount\": \"{{ $('Code').item.json.wordCount }}\",\n  \"category\": \"{{ $('Code').item.json.pdfCategory }}\",\n  \"filePath\": \"{{ $('Save PDF').item.json.filePath }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1180,
+        260
+      ],
+      "id": "26b0fc53-ba02-473b-8aa9-c389c8fbddc3",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6af4c863-73a1-42ad-8129-8c53d2c27676",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "isNotEmpty",
+                "name": "filter.operator.isNotEmpty"
+              }
+            },
+            {
+              "id": "b9e8665f-df55-4ae8-9a83-da8badbf2487",
+              "leftValue": "={{ $('AI Agent').item.json.output }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        280
+      ],
+      "id": "97fa3a89-bda3-45c1-be91-c92e2dbf003b",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Failed to generate PDF content. AI Agent returned empty or invalid response."
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        720,
+        560
+      ],
+      "id": "372d8631-a57f-4908-ba9b-0cf463e3aafc",
+      "name": "Stop and Error"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = items[0].json;\n\nif (!data.name || !data.description || !data.wordCount || !data.pdfCategory) {\n  throw new Error(\"Missing required fields: name, description, wordCount, or pdfCategory\");\n}\nconst hasImages = data.includeImages === true && Array.isArray(data.uploadedImages) && data.uploadedImages.length > 0;\nconst payload = {\n  title: data.name.trim(),\n  description: data.description.trim(),\n  wordCount: data.wordCount,\n  wordOption: data.wordOption || \"50+ words\",\n  pdfCategory: data.pdfCategory.toLowerCase(),\n  isCustom: data.isCustom === true,\n  customRequest: data.customRequest || \"\",\n  includeImages: hasImages,\n  uploadedImages: hasImages ? data.uploadedImages : [],\n  includeTableOfContents: data.includeTableOfContents === true,\n  includeCoverPage: data.includeCoverPage === true,\n  language: data.language || \"english\",\n  designStyle: data.designStyle || \"minimal\",\n  audienceType: data.audienceType || \"general\",\n  userId: data.userId || null,\n  priority: data.priority || \"normal\",\n  timestamp: new Date().toISOString()\n};\n\nreturn [{ json: payload }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        40
+      ],
+      "id": "268e206b-3cea-4e43-b19e-11d92011a786",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "569838f5-9ac0-4ff7-a897-c04808c33f2f",
+              "leftValue": "={{ $json.title && $json.description && $json.wordCount && $json.pdfCategory }}",
+              "rightValue": "= {{true}}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        160,
+        300
+      ],
+      "id": "2977dc04-723b-4b62-81c8-f4ecb05ee994",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "errorMessage": "=\"Validation failed: Missing required fields in webhook data\""
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        240,
+        480
+      ],
+      "id": "6c4084f4-dbac-427a-b0ef-6450177d9335",
+      "name": "Stop and Error1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        420,
+        500
+      ],
+      "id": "46cc6996-a499-41b8-96a5-88fba3ac5f85",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "iiu2H265j44nA7C3",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "=POST",
+        "path": "dc9d409a-fdee-414d-91da-842c5cbc50b0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -20,
+        40
+      ],
+      "id": "26e61971-0605-4abc-87e8-744beaa770b3",
+      "name": "Webhook1",
+      "webhookId": "dc9d409a-fdee-414d-91da-842c5cbc50b0"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PDFco Api": {
+      "main": [
+        [
+          {
+            "node": "Save PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save PDF": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "PDFco Api",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3e9f54f0-8606-40ce-9e8f-606d8f7eecf0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "89294720ba57ccd54ef3f1260ee32cca635ab1a2297dbcae4ac0944675b9e3c0"
+  },
+  "id": "w5kiYA5vVZNbchhd",
+  "tags": []
+}
