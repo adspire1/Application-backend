@@ -1,0 +1,251 @@
+{
+    "name": "Integration Webhooks, CSV, OpenAI (ChatGPT, Whisper, DALL-E)",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": 57,
+                    "y": 218
+                }
+            }
+        },
+        {
+            "id": 2,
+            "module": "csv:ParseCSV",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 3,
+            "module": "builtin:BasicFeeder",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": 529,
+                    "y": 273
+                }
+            }
+        },
+        {
+            "id": 5,
+            "module": "openai-gpt-3:CreateCompletion",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": 962,
+                    "y": 76,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 15,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 1407,
+                    "y": 251
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 16,
+                            "module": "gateway:WebhookRespond",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1571,
+                                    "y": 512
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 6,
+                            "module": "vapi:createOutboundPhoneCall",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1618,
+                                    "y": 56,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 8,
+                            "module": "util:SetVariables",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1821,
+                                    "y": 416
+                                }
+                            }
+                        },
+                        {
+                            "id": 10,
+                            "module": "openai-gpt-3:CreateCompletion",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2175,
+                                    "y": 439,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 11,
+                            "module": "csv:CreateAdvancedAggregator",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2350,
+                                    "y": -81,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        },
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        },
+                                        {
+                                            "category": "source",
+                                            "severity": "error",
+                                            "message": "Source node is not set."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 12,
+                            "module": "google-drive:getAFile",
+                            "version": 4,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2814,
+                                    "y": 452,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 13,
+                            "module": "google-drive:shareAFileFolder",
+                            "version": 4,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2900,
+                                    "y": -184,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 14,
+                            "module": "email:ActionSendEmail",
+                            "version": 7,
+                            "metadata": {
+                                "designer": {
+                                    "x": 3250,
+                                    "y": 457,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        },
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Field must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us2.make.com",
+        "notes": []
+    }
+}
