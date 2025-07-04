@@ -1,0 +1,446 @@
+{
+    "name": "Integration Webhooks, OpenAI (ChatGPT, Whisper, DALL-E), PDF4me, Google Drive",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 2,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 3,
+                            "module": "openai-gpt-3:analyzeImages",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 618,
+                                    "y": -381,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 14,
+                            "module": "util:SetVariable2",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1127,
+                                    "y": -762,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 15,
+                            "module": "anthropic-claude:createAMessage",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1476,
+                                    "y": -390,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 21,
+                            "module": "mailchimp:searchLists",
+                            "version": 2,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2047,
+                                    "y": -385,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 23,
+                            "module": "mailchimp:editACampaignTemplateContent",
+                            "version": 2,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2403,
+                                    "y": -360,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 24,
+                            "module": "mailchimp:createACampaign",
+                            "version": 2,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2778,
+                                    "y": -361,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 4,
+                            "module": "pdf4me:ExtractPdfFormData",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": -150,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 7,
+                            "module": "util:SetVariable2",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1030,
+                                    "y": -427,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 8,
+                            "module": "openai-gpt-3:CreateCompletion",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1315,
+                                    "y": -198,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 25,
+                            "module": "mailchimp:searchLists",
+                            "version": 2,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1668,
+                                    "y": -177
+                                }
+                            }
+                        },
+                        {
+                            "id": 29,
+                            "module": "mailchimp:editACampaignTemplateContent",
+                            "version": 2,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2275,
+                                    "y": -55
+                                }
+                            }
+                        },
+                        {
+                            "id": 33,
+                            "module": "mailchimp:createACampaign",
+                            "version": 2,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2680,
+                                    "y": 5
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 5,
+                            "module": "google-drive:getAFile",
+                            "version": 4,
+                            "metadata": {
+                                "designer": {
+                                    "x": 626,
+                                    "y": 83,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 6,
+                            "module": "pictory:generateVideoTranscription",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1130,
+                                    "y": 87,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 36,
+                            "module": "openai-gpt-3:CreateCompletion",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1281,
+                                    "y": 204,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 26,
+                            "module": "mailchimp:searchLists",
+                            "version": 2,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1534,
+                                    "y": 89
+                                }
+                            }
+                        },
+                        {
+                            "id": 31,
+                            "module": "mailchimp:editACampaignTemplateContent",
+                            "version": 2,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2056,
+                                    "y": 437
+                                }
+                            }
+                        },
+                        {
+                            "id": 34,
+                            "module": "mailchimp:createACampaign",
+                            "version": 2,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2394,
+                                    "y": 489
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 9,
+                            "module": "openai-gpt-3:CreateTranslation",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": 450,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 10,
+                            "module": "openai-gpt-3:CreateCompletion",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1232,
+                                    "y": 842,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 27,
+                            "module": "mailchimp:searchLists",
+                            "version": 2,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1580,
+                                    "y": 487
+                                }
+                            }
+                        },
+                        {
+                            "id": 30,
+                            "module": "mailchimp:editACampaignTemplateContent",
+                            "version": 2,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1958,
+                                    "y": 773
+                                }
+                            }
+                        },
+                        {
+                            "id": 35,
+                            "module": "mailchimp:createACampaign",
+                            "version": 2,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2328,
+                                    "y": 816
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": [
+                [
+                    {
+                        "id": 28,
+                        "module": "mailchimp:editACampaignTemplateContent",
+                        "version": 2,
+                        "metadata": {
+                            "designer": {
+                                "x": -2468,
+                                "y": -273,
+                                "messages": [
+                                    {
+                                        "category": "link",
+                                        "severity": "warning",
+                                        "message": "The module is not connected to the data flow."
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            ]
+        },
+        "zone": "us2.make.com",
+        "notes": []
+    }
+}
