@@ -1,0 +1,241 @@
+{
+    "name": "Integration Bright Data, Google Sheets",
+    "flow": [
+        {
+            "id": 1,
+            "module": "brightdata:scrapeZillow",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 7,
+            "module": "google-sheets:addMultipleRows",
+            "version": 2,
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": [
+                [
+                    {
+                        "id": 3,
+                        "module": "ai-tools:Ask",
+                        "version": 1,
+                        "metadata": {
+                            "designer": {
+                                "x": 600,
+                                "y": 0,
+                                "messages": [
+                                    {
+                                        "category": "setup",
+                                        "severity": "error",
+                                        "message": "Value must not be empty."
+                                    },
+                                    {
+                                        "category": "link",
+                                        "severity": "warning",
+                                        "message": "The module is not connected to the data flow."
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "id": 4,
+                        "module": "openai-gpt-3:CreateCompletion",
+                        "version": 1,
+                        "metadata": {
+                            "designer": {
+                                "x": 900,
+                                "y": 0,
+                                "messages": [
+                                    {
+                                        "category": "setup",
+                                        "severity": "error",
+                                        "message": "Value must not be empty."
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "id": 5,
+                        "module": "vapi:createOutboundPhoneCall",
+                        "version": 1,
+                        "metadata": {
+                            "designer": {
+                                "x": 1200,
+                                "y": 0,
+                                "messages": [
+                                    {
+                                        "category": "setup",
+                                        "severity": "error",
+                                        "message": "Value must not be empty."
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "id": 12,
+                        "module": "openai-gpt-3:CreateCompletion",
+                        "version": 1,
+                        "metadata": {
+                            "designer": {
+                                "x": 1500,
+                                "y": 0,
+                                "messages": [
+                                    {
+                                        "category": "setup",
+                                        "severity": "error",
+                                        "message": "Value must not be empty."
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "id": 6,
+                        "module": "google-sheets:updateRow",
+                        "version": 2,
+                        "metadata": {
+                            "designer": {
+                                "x": 1677,
+                                "y": 255,
+                                "messages": [
+                                    {
+                                        "category": "setup",
+                                        "severity": "error",
+                                        "message": "Value must not be empty."
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "id": 8,
+                        "module": "builtin:BasicRouter",
+                        "version": 1,
+                        "mapper": null,
+                        "metadata": {
+                            "designer": {
+                                "x": 1800,
+                                "y": 0
+                            }
+                        },
+                        "routes": [
+                            {
+                                "flow": [
+                                    {
+                                        "id": 9,
+                                        "module": "calendly:createAScheduleLink",
+                                        "version": 2,
+                                        "metadata": {
+                                            "designer": {
+                                                "x": 2100,
+                                                "y": -150,
+                                                "messages": [
+                                                    {
+                                                        "category": "setup",
+                                                        "severity": "error",
+                                                        "message": "Value must not be empty."
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "flow": [
+                                    {
+                                        "id": 10,
+                                        "module": "email:ActionSendEmail",
+                                        "version": 7,
+                                        "metadata": {
+                                            "designer": {
+                                                "x": 2100,
+                                                "y": 150,
+                                                "messages": [
+                                                    {
+                                                        "category": "setup",
+                                                        "severity": "error",
+                                                        "message": "Value must not be empty."
+                                                    },
+                                                    {
+                                                        "category": "setup",
+                                                        "severity": "error",
+                                                        "message": "Field must not be empty."
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "id": 11,
+                                        "module": "slack:CreateMessage",
+                                        "version": 4,
+                                        "metadata": {
+                                            "designer": {
+                                                "x": 2400,
+                                                "y": 150,
+                                                "messages": [
+                                                    {
+                                                        "category": "setup",
+                                                        "severity": "error",
+                                                        "message": "Value must not be empty."
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        },
+        "zone": "us2.make.com",
+        "notes": []
+    }
+}
