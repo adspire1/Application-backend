@@ -1,0 +1,218 @@
+{
+    "name": "Integration Webhooks, Tools, OpenAI (ChatGPT, Whisper, DALL-E)",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": -260,
+                    "y": -31,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 5,
+            "module": "util:SetVariable2",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": 51,
+                    "y": 125,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 2,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 396,
+                    "y": -24
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 3,
+                            "module": "openai-gpt-3:analyzeImages",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 815,
+                                    "y": -148,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 8,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1115,
+                                    "y": -148
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 6,
+                                            "module": "openai-gpt-3:GenerateImage",
+                                            "version": 1,
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1445,
+                                                    "y": -282,
+                                                    "messages": [
+                                                        {
+                                                            "category": "setup",
+                                                            "severity": "error",
+                                                            "message": "Value must not be empty."
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 9,
+                                            "module": "openai-gpt-3:editImage",
+                                            "version": 1,
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1415,
+                                                    "y": 2,
+                                                    "messages": [
+                                                        {
+                                                            "category": "setup",
+                                                            "severity": "error",
+                                                            "message": "Value must not be empty."
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "id": 10,
+                                            "module": "gateway:WebhookRespond",
+                                            "version": 1,
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1715,
+                                                    "y": 2
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 4,
+                            "module": "openai-gpt-3:CreateCompletion",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 619,
+                                    "y": 91,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 7,
+                            "module": "openai-gpt-3:GenerateImage",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1022,
+                                    "y": 292,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 11,
+                            "module": "gateway:WebhookRespond",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1377,
+                                    "y": 302
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us2.make.com",
+        "notes": []
+    }
+}
