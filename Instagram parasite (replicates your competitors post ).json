@@ -1,0 +1,254 @@
+{
+    "name": "Integration Instagram for Business (Facebook login), OpenAI (ChatGPT, Whisper, DALL-E)",
+    "flow": [
+        {
+            "id": 1,
+            "module": "instagram-business:WatchPublicUserMedia",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 2,
+            "module": "instagram-business:GetMedia",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 12,
+            "module": "google-drive:getAFile",
+            "version": 4,
+            "metadata": {
+                "designer": {
+                    "x": 483,
+                    "y": 138,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 3,
+            "module": "instagram-business:DownloadMedia",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": 633,
+                    "y": -43,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 4,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 0
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 5,
+                            "module": "openai-gpt-3:analyzeImages",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1200,
+                                    "y": -150,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 7,
+                            "module": "openai-gpt-3:GenerateImage",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1500,
+                                    "y": -150,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 6,
+                            "module": "openai-gpt-3:CreateCompletion",
+                            "version": 1,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1200,
+                                    "y": 150,
+                                    "messages": [
+                                        {
+                                            "category": "setup",
+                                            "severity": "error",
+                                            "message": "Value must not be empty."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 8,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1500,
+                                    "y": 150
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 9,
+                                            "module": "instagram-business:CreatePostPhoto",
+                                            "version": 1,
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1800,
+                                                    "y": -150,
+                                                    "messages": [
+                                                        {
+                                                            "category": "setup",
+                                                            "severity": "error",
+                                                            "message": "Value must not be empty."
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 10,
+                                            "module": "linkedin:ShareImage",
+                                            "version": 2,
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1800,
+                                                    "y": 150,
+                                                    "messages": [
+                                                        {
+                                                            "category": "setup",
+                                                            "severity": "error",
+                                                            "message": "Value must not be empty."
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 11,
+                                            "module": "facebook-pages:CreatePost",
+                                            "version": 6,
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1800,
+                                                    "y": 450,
+                                                    "messages": [
+                                                        {
+                                                            "category": "setup",
+                                                            "severity": "error",
+                                                            "message": "Value must not be empty."
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us2.make.com",
+        "notes": []
+    }
+}
